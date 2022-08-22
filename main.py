@@ -14,7 +14,7 @@ def main():
         if is_valid_arg(depth):
             get_urls(base_url, depth)
     else:
-        'Неверный ввод'
+        input('Неверный ввод')
 
 
 if __name__ == '__main__':
