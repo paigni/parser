@@ -1,10 +1,10 @@
 import requests
-from check import is_valid_url
+from check import is_valid_url, check_is_up_url
 from bs4 import BeautifulSoup
 from urllib.parse import urlparse
 
 
-def get_urls(url, depth=3):
+def get_urls(url, depth, counter=0):
     urls = set()
     req = requests.get(url)
     soup = BeautifulSoup(req.content, "html.parser")
@@ -18,13 +18,14 @@ def get_urls(url, depth=3):
         href = parsed_href.scheme + "://" + parsed_href.netloc + parsed_href.path
         if not is_valid_url(href):
             continue
+        if not check_is_up_url(req):
+            continue
         urls.add(href)
 
     urls = list(urls)
     if depth > 0:
-        for link in urls:
+        for url in urls:
             space = '\t'
-            get_urls(link, depth-1)
-            print(space * depth + link)
-
+            get_urls(url, depth-1, counter+1)
+            print(space * counter + url)
         return urls

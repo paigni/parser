@@ -1,15 +1,10 @@
 from urllib.parse import urlparse
-import urllib.request
-import urllib.error
 
 
-def check_is_up_url(url):
-    check_is_up = urllib.request.Request(url)
-    try:
-        urllib.request.urlopen(check_is_up)
+def check_is_up_url(req):
+    if req.status_code == 200:
         return True
-    except urllib.error.URLError:
-        return False
+    return False
 
 
 def is_valid_url(url):
@@ -17,9 +12,14 @@ def is_valid_url(url):
     return bool(parsed.netloc) and bool(parsed.scheme)
 
 
-def is_valid_arg(arg):
-    if 0 < arg < 999:
+def is_valid_arg_2(arg2):
+    if arg2.isdigit() and 0 < arg2 < 999:
         return True
     return False
 
-# проверка на повтор
+
+def is_valid_args(arg1, arg2):
+    if is_valid_url(arg1):
+        if is_valid_arg_2(arg2):
+            return True
+    return False
